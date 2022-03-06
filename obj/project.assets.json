@@ -6132,11 +6132,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mare\\source\\repos\\FlightReservationConsole\\FlightReservationConsole.csproj",
+      "projectUniqueName": "C:\\Users\\Mare\\Documents\\GitHub\\FlightReservationReal\\FlightReservationConsole.csproj",
       "projectName": "FlightReservationConsole",
-      "projectPath": "C:\\Users\\Mare\\source\\repos\\FlightReservationConsole\\FlightReservationConsole.csproj",
+      "projectPath": "C:\\Users\\Mare\\Documents\\GitHub\\FlightReservationReal\\FlightReservationConsole.csproj",
       "packagesPath": "C:\\Users\\Mare\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mare\\source\\repos\\FlightReservationConsole\\obj\\",
+      "outputPath": "C:\\Users\\Mare\\Documents\\GitHub\\FlightReservationReal\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

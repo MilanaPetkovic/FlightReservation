@@ -1,13 +1,9 @@
 ﻿using FlightReservationConsole.Models;
 using PuppeteerSharp;
-using RestSharp;
 using System;
 using System.Configuration;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FlightReservationConsole
@@ -41,7 +37,7 @@ namespace FlightReservationConsole
                 flightReservation.LessThanDays = int.Parse(Console.ReadLine());
                 Console.Write("You don't want to stay more than(days): ");
                 flightReservation.MoreThanDays = int.Parse(Console.ReadLine());
-               
+
                 var fromFlyBack = flightReservation.DateFrom.AddDays(-flightReservation.LessThanDays);
                 var toArrive = flightReservation.DateTo.AddDays(-flightReservation.MoreThanDays);
 
@@ -60,72 +56,52 @@ namespace FlightReservationConsole
                 //Click accept all cookies
                 var button = await page.QuerySelectorAsync("button");
                 await button.ClickAsync();
-                //Scrol one time
-                await page.EvaluateExpressionAsync("window.scrollBy(0, window.innerHeight)");
 
+                Thread.Sleep(10000);
                 string html = await page.GetContentAsync();
                 int flightNumber = 0;
                 try
                 {
-                    bool isSecondTry = false;
-                    for (int i = 1; ; i = i + 8)
+                    for (int i = 1; ; i++)
                     {
-                        flightNumber++;
-                        DateTime arrive = DateTime.Now;
-                        DateTime flightBack = DateTime.Now;
                         try
                         {
-                             arrive = DateTime.Parse
-                                (html.Split("<time")[i]
-                                    .Split("datetime=")[1]
-                                    .Split(">")[0]
-                                    .Replace("\"", "")
-                                );
+                            flightNumber++;
 
-                             flightBack = DateTime.Parse
-                                (html.Split("<time")[i + 4]
-                                    .Split("datetime=")[1]
-                                    .Split(">")[0]
-                                    .Replace("\"", "")
-                                );
+                            var nightsSiplitted = html.Split("ResultCardItinerarystyled__SectorLayoverTextBackground-sc-iwhyue-9 cJMqrQ\">")[i]
+                                    .Split("nights")[0].Trim();
+                            int nights = int.Parse(html.Split("ResultCardItinerarystyled__SectorLayoverTextBackground-sc-iwhyue-9 cJMqrQ\">")[i]
+                                    .Split("nights")[0].Trim());
+
+                            //If this filght okay for us, break the loop and book it
+                            if (nights >= flightReservation.LessThanDays && nights <= flightReservation.MoreThanDays)
+                                break;                    
                         }
-                        catch(Exception ex)
+                        catch (Exception)
                         {
-                            string expectedMessage = "was not recognized as a valid DateTime";
-                            //Sometimes page have 1 or 2 more than ussual <time> selectors per item, there is the logic to handle that
-                            if (ex.Message.Contains(expectedMessage))
+                            await page.EvaluateExpressionAsync("window.scrollBy(1, window.innerHeight)");
+                            Thread.Sleep(5000);
+                            var newHtml = await page.GetContentAsync();
+                            i--;
+
+                            if(newHtml == html)
                             {
-                                i = i - 8 + 1;
-                                isSecondTry = true;
-                            }                                
-                            else if(ex.Message.Contains(expectedMessage) && isSecondTry)
-                            {
-                                i = i - 8 + 2;
-                                isSecondTry = false;
+                                await page.ClickAsync("button[class='ButtonPrimitive__StyledButtonPrimitive-sc-1lbd19y-0 cVsCSD']");
+                                Thread.Sleep(10000);
+                                await page.EvaluateExpressionAsync("window.scrollBy(1, window.innerHeight)");
+                                Thread.Sleep(5000);
+                                html = await page.GetContentAsync();
                             }
-
+                            else
+                            {
+                                html = newHtml;
+                            }
                         }
-
-                        var timeSpan = flightBack - arrive;
-
-                        //If this filght okay for us, break the loop and book it
-                        if (timeSpan.Days >= flightReservation.LessThanDays && timeSpan.Days <= flightReservation.MoreThanDays)
-                            break;
-
-                        //Scroll one time
-                        await page.EvaluateExpressionAsync("window.scrollBy(0, window.innerHeight)");
-                        //Get scrolled page content
-                        var newHtml = await page.GetContentAsync();
-
-                        if (html != newHtml)
-                            html = newHtml;                         
-                        else
-                            await page.ClickAsync("button[class='ButtonPrimitive__StyledButtonPrimitive-sc-1lbd19y-0 cVsCSD']");                        
-                    }                                               
+                    }
                 }
-                
+
                 catch (Exception ex)
-                {
+                {                  
                     throw new Exception("There is no cheap flights for that dates");
                 }
 
@@ -147,7 +123,7 @@ namespace FlightReservationConsole
                 Console.WriteLine($"Cheapest flight {price}");
                 Console.WriteLine("Can be booked on url: {bookingUrl}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

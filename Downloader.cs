@@ -1,11 +1,6 @@
 ﻿using PuppeteerSharp;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightReservationConsole
 {
@@ -16,7 +11,7 @@ namespace FlightReservationConsole
 
         private string DownloadDirectory { get; set; }
 
-         public Downloader(string downloadDirectory, bool headless = true)
+        public Downloader(string downloadDirectory, bool headless = true)
         {
             _isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             _isHeadless = headless;
