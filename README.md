@@ -7,6 +7,7 @@
 - [How to set chromium download path](#chromiumdownload)
 - [Input parameters](#inputparameters)
 - [Output](#output)
+- [Tiket booking example](#example)
 
 ## ChromiumDownload
 
@@ -31,13 +32,12 @@ Cheapest price and url where tickets can be booked are shown in console output (
 
 If it is not satisfactory solution just type "n" and press enter, script will continue searching for another one
 
-<details>
-	<summary>Tikcet booking url example<summary>
+## Example
 
- 
+Url from the console looks like this in the browser
+
  ![image](https://github.com/MilanaPetkovic/FlightReservation/blob/main/ReadmePictures/bookingUrlExample.png)
 
-</details>
 
 
 
