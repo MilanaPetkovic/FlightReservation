@@ -30,7 +30,8 @@ Once enter is pressed chroimium instance will be fired up, and script will start
 
 Cheapest price and url where tickets can be booked are shown in console output (no wories, price will be in your local currency)
 
-If it is not satisfactory solution just type "n" and press enter, script will continue searching for another one
+If it is not satisfactory solution just type "n" and press enter, script will continue searching for another one.
+If you are satisfied with the answer just copy "Can be booked on url: *" url in the browser
 
 ## Example
 
