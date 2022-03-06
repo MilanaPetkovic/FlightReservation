@@ -33,7 +33,6 @@ If it is not satisfactory solution just type "n" and press enter, script will co
 
 <details>
 	<summary>Tikcet booking url example<summary>
- Ticket booking url looks like this
  ![image](https://github.com/MilanaPetkovic/FlightReservation/blob/main/ReadmePictures/bookingUrlExample.png)
 </details>
 
