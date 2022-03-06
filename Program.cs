@@ -13,8 +13,8 @@ namespace FlightReservationConsole
         static readonly string mainUrl = "https://www.kiwi.com";
         static async Task Main(string[] args)
         {
-            string searching = "y";
-            while (searching == "y")
+            string searching = "n";
+            while (searching == "n")
             {
                 try
                 {

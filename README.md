@@ -31,6 +31,12 @@ Cheapest price and url where tickets can be booked are shown in console output (
 
 If it is not satisfactory solution just type "n" and press enter, script will continue searching for another one
 
+<details>
+	<summary>Tikcet booking url example<summary>
+ Ticket booking url looks like this
+ ![image](https://github.com/MilanaPetkovic/FlightReservation/blob/main/ReadmePictures/bookingUrlExample.png)
+</details>
+
 
 
 
