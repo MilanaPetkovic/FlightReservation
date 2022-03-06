@@ -28,7 +28,6 @@ namespace FlightReservationConsole
 
                     //Insert between dates 
                     Console.WriteLine("Between dates:");
-                    DateTime helper;
                     Console.Write("From(yyyy-MM-dd): ");
                     flightReservation.DateFrom = DateTime.ParseExact(Console.ReadLine(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
@@ -36,9 +35,9 @@ namespace FlightReservationConsole
                     flightReservation.DateTo = DateTime.ParseExact(Console.ReadLine(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                     //Insert how much time you want to stay
-                    Console.Write("You don't want to stay less than(days): ");
+                    Console.Write("You don't want to stay less than(nights): ");
                     flightReservation.LessThanDays = int.Parse(Console.ReadLine());
-                    Console.Write("You don't want to stay more than(days): ");
+                    Console.Write("You don't want to stay more than(nights): ");
                     flightReservation.MoreThanDays = int.Parse(Console.ReadLine());
 
                     var fromFlyBack = flightReservation.DateFrom.AddDays(-flightReservation.LessThanDays);
@@ -71,8 +70,6 @@ namespace FlightReservationConsole
                             {
                                 flightNumber++;
 
-                                var nightsSiplitted = html.Split("ResultCardItinerarystyled__SectorLayoverTextBackground-sc-iwhyue-9 cJMqrQ\">")[i]
-                                        .Split("nights")[0].Trim();
                                 int nights = int.Parse(html.Split("ResultCardItinerarystyled__SectorLayoverTextBackground-sc-iwhyue-9 cJMqrQ\">")[i]
                                         .Split("nights")[0].Trim());
 
@@ -108,13 +105,27 @@ namespace FlightReservationConsole
                         throw new Exception("There is no cheap flights for that dates");
                     }
 
-
-                    var bookingUrl = html.Split("<a class=\"ButtonPrimitive__StyledButtonPrimitive-sc-1lbd19y-0 kBsuLf\"")[flightNumber]
-                        .Split("rel=\"nofollow\"")[0]
-                        .Replace("\"", "")
-                        .Replace("href=", "")
-                        .Replace(";", "&")
-                        .Trim();
+                    string bookingUrl = "";
+                    bool scrollMore = true;
+                    while (scrollMore)
+                    {
+                        try
+                        {
+                             bookingUrl = html.Split("<a class=\"ButtonPrimitive__StyledButtonPrimitive-sc-1lbd19y-0 kBsuLf\"")[flightNumber]
+                                .Split("rel=\"nofollow\"")[0]
+                                .Replace("\"", "")
+                                .Replace("href=", "")
+                                .Replace(";", "&")
+                                .Trim();
+                            scrollMore = false;
+                        }
+                        catch (Exception)
+                        {
+                            await page.EvaluateExpressionAsync("window.scrollBy(1, window.innerHeight)");
+                            Thread.Sleep(5000);
+                            html = await page.GetContentAsync();
+                        }
+                    }
 
                     //Final booking url
                     bookingUrl = $"{mainUrl}{bookingUrl}";
@@ -124,7 +135,7 @@ namespace FlightReservationConsole
                         .Split("</span>")[0];
 
                     Console.WriteLine($"Cheapest flight {price}");
-                    Console.WriteLine("Can be booked on url: {bookingUrl}");
+                    Console.WriteLine($"Can be booked on url: {bookingUrl}");
                     Console.Write("Is this answer satisfying y(stop the app)/n(search more): ");
                     searching = Console.ReadLine();
                 }
