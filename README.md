@@ -2,7 +2,7 @@
 
 ### Find the cheapest flight for you
 
-> note: This script uses PuppeteerSharp, which will download Chromium instance on the path you set in "App.congfig" file (default is C:\\chromium)
+> note: This script uses PuppeteerSharp, which will download Chromium instance on the path you set in "App.config" file (default is C:\\chromium)
 
 - [How to set chromium download path](#chromiumdownload)
 - [Input parameters](#inputparameters)
